@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="DAO.DataShowMapper">
+  <resultMap id="BaseResultMap" type="POJO.DataShow">
+    <!--@mbg.generated-->
+    <!--@Table datashow-->
+    <id column="data_id" jdbcType="INTEGER" property="dataId" />
+    <result column="date" jdbcType="TIMESTAMP" property="date" />
+    <result column="news_count" jdbcType="INTEGER" property="newsCount" />
+    <result column="user_count" jdbcType="INTEGER" property="userCount" />
+    <result column="feedback_count" jdbcType="INTEGER" property="feedbackCount" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--@mbg.generated-->
+    data_id, `date`, news_count, user_count, feedback_count
+  </sql>
+  <insert id="insertSelective" keyColumn="data_id" keyProperty="dataId" parameterType="POJO.DataShow" useGeneratedKeys="true">
+    <!--@mbg.generated-->
+    insert into datashow
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="date != null">
+        `date`,
+      </if>
+      <if test="newsCount != null">
+        news_count,
+      </if>
+      <if test="userCount != null">
+        user_count,
+      </if>
+      <if test="feedbackCount != null">
+        feedback_count,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="date != null">
+        #{date,jdbcType=TIMESTAMP},
+      </if>
+      <if test="newsCount != null">
+        #{newsCount,jdbcType=INTEGER},
+      </if>
+      <if test="userCount != null">
+        #{userCount,jdbcType=INTEGER},
+      </if>
+      <if test="feedbackCount != null">
+        #{feedbackCount,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="POJO.DataShow">
+    <!--@mbg.generated-->
+    update datashow
+    <set>
+      <if test="date != null">
+        `date` = #{date,jdbcType=TIMESTAMP},
+      </if>
+      <if test="newsCount != null">
+        news_count = #{newsCount,jdbcType=INTEGER},
+      </if>
+      <if test="userCount != null">
+        user_count = #{userCount,jdbcType=INTEGER},
+      </if>
+      <if test="feedbackCount != null">
+        feedback_count = #{feedbackCount,jdbcType=INTEGER},
+      </if>
+    </set>
+    where data_id = #{dataId,jdbcType=INTEGER}
+  </update>
+
+
+  <select id="query" resultMap="BaseResultMap"><!--data_id,date_format(date, '%Y-%m-%d') date,news_count,user_count,feedback_count-->
+    select * from datashow
+    limit #{count},12
+  </select>
+
+  <select id="queryLast" resultMap="BaseResultMap">
+    SELECT * from datashow where data_id = (SELECT max(data_id) FROM datashow);
+  </select>
+
+  <select id="count" resultType="java.lang.Integer">
+    select count(*) from datashow
+  </select>
+
+  <select id="queryAll" resultType="POJO.Feedback">
+      select * from feedbacks
+      <where>
+        <if test="search != null">
+          feedback_id = #{search,jdbcType=VARCHAR}
+        </if>
+      </where>
+    limit #{offset},#{rows}
+  </select>
+
+  <select id="queryCount" resultType="java.lang.Integer">
+    select count(*) from feedbacks
+    <where>
+      <if test="search != null">
+        feedback_id = #{search,jdbcType=VARCHAR}
+      </if>
+    </where>
+  </select>
+</mapper>

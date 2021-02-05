@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="DAO.PicNewsMapper">
+    <resultMap id="BaseResultMap" type="POJO.PicNews">
+        <!--@mbg.generated-->
+        <!--@Table picnews-->
+        <id column="news_id" jdbcType="BIGINT" property="newsId"/>
+        <result column="title" jdbcType="VARCHAR" property="title"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="pic_url" jdbcType="VARCHAR" property="picUrl"/>
+        <result column="category_id" jdbcType="BIGINT" property="categoryId"/>
+        <result column="state" jdbcType="INTEGER" property="state"/>
+        <result column="isShown" jdbcType="INTEGER" property="isshown"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        <!--@mbg.generated-->
+        news_id, title, create_time, pic_url, category_id, `state`, isShown
+    </sql>
+    <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        <!--@mbg.generated-->
+        select
+
+
+        <include refid="Base_Column_List"/>
+
+
+        from picnews
+        where news_id = #{newsId,jdbcType=BIGINT}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+        <!--@mbg.generated-->
+        delete from picnews
+        where news_id = #{newsId,jdbcType=BIGINT}
+    </delete>
+    <insert id="insert" parameterType="POJO.PicNews">
+        <!--@mbg.generated-->
+        insert into picnews (news_id, title, create_time,
+        pic_url, category_id, `state`,
+        isShown)
+        values (#{newsId,jdbcType=BIGINT}, #{title,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP},
+        #{picUrl,jdbcType=VARCHAR}, #{categoryId,jdbcType=BIGINT}, #{state,jdbcType=INTEGER},
+        #{isshown,jdbcType=INTEGER})
+    </insert>
+    <insert id="insertSelective" parameterType="POJO.PicNews">
+        <!--@mbg.generated-->
+        insert into picnews
+
+
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="newsId != null">
+                news_id,
+            </if>
+            <if test="title != null">
+                title,
+            </if>
+            <if test="createTime != null">
+                create_time,
+            </if>
+            <if test="picUrl != null">
+                pic_url,
+            </if>
+            <if test="categoryId != null">
+                category_id,
+            </if>
+            <if test="state != null">
+                `state`,
+            </if>
+            <if test="isshown != null">
+                isShown,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="newsId != null">
+                #{newsId,jdbcType=BIGINT},
+            </if>
+            <if test="title != null">
+                #{title,jdbcType=VARCHAR},
+            </if>
+            <if test="createTime != null">
+                #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="picUrl != null">
+                #{picUrl,jdbcType=VARCHAR},
+            </if>
+            <if test="categoryId != null">
+                #{categoryId,jdbcType=BIGINT},
+            </if>
+            <if test="state != null">
+                #{state,jdbcType=INTEGER},
+            </if>
+            <if test="isshown != null">
+                #{isshown,jdbcType=INTEGER},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="POJO.PicNews">
+        <!--@mbg.generated-->
+        update picnews
+        <set>
+            <if test="title != null">
+                title = #{title,jdbcType=VARCHAR},
+            </if>
+            <if test="createTime != null">
+                create_time = #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="picUrl != null">
+                pic_url = #{picUrl,jdbcType=VARCHAR},
+            </if>
+            <if test="categoryId != null">
+                category_id = #{categoryId,jdbcType=BIGINT},
+            </if>
+            <if test="state != null">
+                `state` = #{state,jdbcType=INTEGER},
+            </if>
+            <if test="isshown != null">
+                isShown = #{isshown,jdbcType=INTEGER},
+            </if>
+        </set>
+        where news_id = #{newsId,jdbcType=BIGINT}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="POJO.PicNews">
+        <!--@mbg.generated-->
+        update picnews
+        set title = #{title,jdbcType=VARCHAR},
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+        pic_url = #{picUrl,jdbcType=VARCHAR},
+        category_id = #{categoryId,jdbcType=BIGINT},
+        `state` = #{state,jdbcType=INTEGER},
+        isShown = #{isshown,jdbcType=INTEGER}
+        where news_id = #{newsId,jdbcType=BIGINT}
+    </update>
+    <update id="updateChangeTo0">
+        update picnews set isShown = 0
+        where news_id = #{newsId,jdbcType=BIGINT}
+    </update>
+    <update id="updateChangeTo1">
+        update picnews set isShown = 1
+        where news_id = #{newsId,jdbcType=BIGINT}
+    </update>
+    <select id="count" resultType="java.lang.Integer">
+        select count(*) from picnews where news_id = #{newsId,jdbcType=BIGINT}
+    </select>
+    <select id="queryPicNewsByCategoryId" resultMap="BaseResultMap">
+        select * from picnews where category_id = #{categoryId,jdbcType=BIGINT}
+        and state = 1
+    </select>
+
+    <select id="queryPicNewsByIsShownAndCategoryId" resultMap="BaseResultMap">
+        select * from picnews where category_id = #{categoryId,jdbcType=BIGINT}
+        and state = 1 and isShown = 1
+    </select>
+
+    <update id="updateState">
+        update picnews set state = #{newState,jdbcType=INTEGER}
+        where news_id = #{newsId,jdbcType=BIGINT}
+    </update>
+
+</mapper>

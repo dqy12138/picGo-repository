@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="DAO.UsersMapper">
+  <resultMap id="BaseResultMap" type="POJO.Users">
+    <!--@mbg.generated-->
+    <!--@Table users-->
+    <id column="user_id" jdbcType="BIGINT" property="userId" />
+    <result column="user_name" jdbcType="VARCHAR" property="userName" />
+    <result column="user_password" jdbcType="VARCHAR" property="userPassword" />
+    <result column="user_phone" jdbcType="INTEGER" property="userPhone" />
+    <result column="user_address" jdbcType="VARCHAR" property="userAddress" />
+    <result column="user_detail" jdbcType="VARCHAR" property="userDetail" />
+    <result column="user_email" jdbcType="VARCHAR" property="userEmail" />
+    <result column="user_state" jdbcType="VARCHAR" property="userState" />
+<!--    <result column="user_icon" jdbcType="VARCHAR" property="userIcon" />-->
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--@mbg.generated-->
+    user_id, user_name, user_password, user_phone, user_address, user_detail, user_email,user_state
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    <!--@mbg.generated-->
+    select 
+    <include refid="Base_Column_List" />
+    from users
+    where user_id = #{userId,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    <!--@mbg.generated-->
+    delete from users
+    where user_id = #{userId,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" keyColumn="user_id" keyProperty="userId" parameterType="POJO.Users" useGeneratedKeys="true">
+    <!--@mbg.generated-->
+    insert into users (user_name, user_password, user_phone, 
+      user_address, user_detail, user_email
+      )
+    values (#{userName,jdbcType=VARCHAR}, #{userPassword,jdbcType=VARCHAR}, #{userPhone,jdbcType=INTEGER}, 
+      #{userAddress,jdbcType=VARCHAR}, #{userDetail,jdbcType=VARCHAR}, #{userEmail,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" keyColumn="user_id" keyProperty="userId" parameterType="POJO.Users" useGeneratedKeys="true">
+    <!--@mbg.generated-->
+    insert into users
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="userName != null">
+        user_name,
+      </if>
+      <if test="userPassword != null">
+        user_password,
+      </if>
+      <if test="userPhone != null">
+        user_phone,
+      </if>
+      <if test="userAddress != null">
+        user_address,
+      </if>
+      <if test="userDetail != null">
+        user_detail,
+      </if>
+      <if test="userEmail != null">
+        user_email,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="userName != null">
+        #{userName,jdbcType=VARCHAR},
+      </if>
+      <if test="userPassword != null">
+        #{userPassword,jdbcType=VARCHAR},
+      </if>
+      <if test="userPhone != null">
+        #{userPhone,jdbcType=INTEGER},
+      </if>
+      <if test="userAddress != null">
+        #{userAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="userDetail != null">
+        #{userDetail,jdbcType=VARCHAR},
+      </if>
+      <if test="userEmail != null">
+        #{userEmail,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="POJO.Users">
+    <!--@mbg.generated-->
+    update users
+    <set>
+      <if test="userName != null">
+        user_name = #{userName,jdbcType=VARCHAR},
+      </if>
+      <if test="userPassword != null">
+        user_password = #{userPassword,jdbcType=VARCHAR},
+      </if>
+      <if test="userPhone != null">
+        user_phone = #{userPhone,jdbcType=INTEGER},
+      </if>
+      <if test="userAddress != null">
+        user_address = #{userAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="userDetail != null">
+        user_detail = #{userDetail,jdbcType=VARCHAR},
+      </if>
+      <if test="userEmail != null">
+        user_email = #{userEmail,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where user_id = #{userId,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="POJO.Users">
+    <!--@mbg.generated-->
+    update users
+    set user_name = #{userName,jdbcType=VARCHAR},
+      user_password = #{userPassword,jdbcType=VARCHAR},
+      user_phone = #{userPhone,jdbcType=INTEGER},
+      user_address = #{userAddress,jdbcType=VARCHAR},
+      user_detail = #{userDetail,jdbcType=VARCHAR},
+      user_email = #{userEmail,jdbcType=VARCHAR}
+    where user_id = #{userId,jdbcType=BIGINT}
+  </update>
+
+  <select id="queryByPage" resultMap="BaseResultMap">
+    select * from users limit #{offset},#{rows}
+  </select>
+
+  <select id="countAll" resultType="java.lang.Integer">
+    select count(*) from users
+  </select>
+</mapper>

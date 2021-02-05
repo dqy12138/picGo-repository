@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.springframework.org/schema/context
+       http://www.springframework.org/schema/context/spring-context.xsd
+       http://www.springframework.org/schema/tx
+       http://www.springframework.org/schema/tx/spring-tx.xsd">
+
+    <!--开启扫描--><!--将Spring的相关注解的类注册为Spring的bean-->
+    <context:component-scan base-package="DAO,POJO,Service,Interceptor"/>
+
+
+
+    <!--   读取数据源配置 -->
+    <context:property-placeholder location="classpath:db.properties" ignore-unresolvable="true"/>
+    <!--  配置数据源  -->
+    <bean id="dataSource"
+          class="org.apache.commons.dbcp.BasicDataSource"><!--destroy-method="close",在销毁dataSource bean时，关闭所有链接-->
+        <property name="driverClassName" value="${jdbc.driver}"/>
+        <property name="url" value="${jdbc.url}"/>
+        <property name="username" value="${jdbc.username}"/>
+        <property name="password" value="${jdbc.password}"/>
+        <property name="maxIdle" value="${jdbc.maxIdle}"/>
+        <property name="maxActive" value="${jdbc.maxActive}"/>
+        <property name="initialSize" value="${jdbc.initialSize}"/>
+    </bean>
+
+    <!--指定引入的资源文件，如.properties文件 -->
+    <context:property-placeholder location="classpath:mail.properties" ignore-unresolvable="true"/>
+    <!-- 配置简单邮件消息对象 -->
+    <bean id="mailMessage" class="org.springframework.mail.SimpleMailMessage" autowire="byName">
+        <property name="from" value="${mail.from}"/>
+    </bean>
+    <!-- 配置邮件发送器 -->
+    <bean id="mailSender" autowire="byName" class="org.springframework.mail.javamail.JavaMailSenderImpl">
+        <property name="host" value="${mail.host}"/>
+        <property name="username" value="${mail.username}"/>
+        <property name="password" value="${mail.password}"/>
+        <property name="defaultEncoding" value="${mail.encoding}"/>
+        <property name="protocol" value="${mail.protocol}"/>
+        <property name="javaMailProperties">
+            <props>
+                <prop key="mail.smtp.auth">true</prop><!--是否需要验证-->
+                <prop key="mail.debug">true</prop>
+                <prop key="mail.smtp.timeout">0</prop>
+            </props>
+        </property>
+    </bean>
+
+    <!--配置日志-->
+    <context:property-placeholder location="classpath:log4j.properties"/>
+
+
+    <!--事务管理器 好像没用上-->
+    <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource" ref="dataSource"/>
+    </bean>
+    <!--  开启事务注解，注册事务管理器驱动  -->
+    <tx:annotation-driven transaction-manager="transactionManager"/>
+
+    <!--  mybatis 与 spring 整合 -->
+    <!--  配置Mybatis工厂  -->
+    <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+        <property name="dataSource" ref="dataSource"/>
+        <property name="configLocation" value="classpath:Mybatis-config.xml"/>
+    </bean>
+
+    <!--  Mapper代理开发（MapperScannerConfigurer）推荐使用  --><!--Mapper文件扫描器-->
+    <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+        <property name="basePackage" value="DAO"/>
+    </bean>
+
+
+</beans>

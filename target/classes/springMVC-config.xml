@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/context
+        http://www.springframework.org/schema/context/spring-context.xsd
+        http://www.springframework.org/schema/mvc
+        http://www.springframework.org/schema/mvc/spring-mvc.xsd
+        http://www.springframework.org/schema/aop
+        http://www.springframework.org/schema/aop/spring-aop.xsd">
+
+
+    <!--Spring扫描机制，此处扫描SpringMVC控制器-->
+    <context:component-scan base-package="Controller"/>
+
+    <!--aop-->
+    <aop:aspectj-autoproxy/>
+
+    <mvc:annotation-driven>
+        <mvc:message-converters>
+            <bean class="org.springframework.http.converter.StringHttpMessageConverter">
+                <property name="supportedMediaTypes">
+                    <list>
+                        <value>text/plain;charset=UTF-8</value>
+                        <value>text/html;charset=UTF-8</value>
+                        <value>application/json;charset=utf-8</value>
+                        <value>application/x-www-form-urlencoded;charset=utf-8</value>
+                    </list>
+                </property>
+            </bean>
+            <bean id="jacksonMessageConverter"
+                  class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter">
+                <property name="supportedMediaTypes">
+                    <list>
+                        <value>application/json;charset=UTF-8</value>
+                        <value>application/x-www-form-urlencoded;charset=UTF-8</value>
+                    </list>
+                </property>
+            </bean>
+        </mvc:message-converters>
+    </mvc:annotation-driven>
+
+    <!--释放静态资源-->
+    <!--定义一个DefaultServletHttpRequestHandler筛选进入DispatcherServlet的URL，释放静态资源转由Web应用服务器默认的Servlet处理-->
+
+    <mvc:default-servlet-handler/><!--有效-->
+    <!--配置静态资源映射,防止静态资源被拦截  -->
+    <!--<mvc:resources location="/Module/css/" mapping="/css/**"/>
+    <mvc:resources location="/Module/js/" mapping="/js/**"/>
+    <mvc:resources location="/CSS/" mapping="/**"/>
+    <mvc:resources location="/JS/" mapping="/**"/>
+    <mvc:resources location="/Module/images/" mapping="/images/**"/>-->
+
+    <!--  视图解析器 拼装路径前缀后缀-->
+    <bean name="internalResourceViewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+        <property name="prefix" value="/Module/"/>
+        <property name="suffix" value=".jsp"/>
+    </bean>
+
+    <!--拦截器-->
+    <mvc:interceptors>
+        <mvc:interceptor>
+            <mvc:mapping path="/**"/>
+            <bean class="Interceptor.adminInterceptor"/>
+        </mvc:interceptor>
+    </mvc:interceptors>
+
+    <!--文件上传-->
+    <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+        <property name="defaultEncoding" value="utf-8"/>
+        <property name="maxUploadSizePerFile" value="5242880"/><!--5M-->
+        <property name="resolveLazily" value="true"/>
+    </bean>
+</beans>

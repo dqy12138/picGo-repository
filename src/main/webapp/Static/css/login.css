@@ -1,0 +1,106 @@
+body {
+    margin: 0;
+    padding: 0;
+    background: url("../img/bg_all.jpg") no-repeat;
+    background-size: 100%;
+}
+
+html {
+    height: 100%;
+    box-shadow: 0px 0px 300px #000 inset;
+    -webkit-box-shadow: 0px 0px 50px #000 inset;
+}
+
+form {
+    position: absolute;
+    left: 50%;
+    top: 40%;
+    margin-left: -300px;
+    margin-top: -220px;
+    width: 480px;
+    height: 380px;
+    background: url("../img/b.png") no-repeat;
+    border-radius: 25px;
+    color: #fff;
+    text-align: center;
+    padding: 65px;
+    /*box-shadow: 0px 0px 15px #0005;*/
+}
+
+input {
+    outline: none;
+    margin-top: 18px;
+    border: 0;
+    width: 300px;
+    height: 50px;
+    border-radius: 15px;
+    padding-left: 15px;
+    font-size: 18px;
+    color: #999;
+}
+
+h1 {
+    /* margin-block-start: auto; */
+    /* margin-block-end: auto; */
+    color: #fff;
+    font-family: cursive;
+    text-shadow: 7px 3px 3px #0e0e08;
+    font-weight: bolder;
+}
+
+.input_3:active, #getValidateCode:active {
+    border-radius: 10px;
+    transform: translateY(4px);
+}
+
+.input_3:hover {
+    background-color: #e5c42d;
+}
+
+input.input_3 {
+    width: 180px;
+    color: #000;
+    background: #f6d85f;
+}
+
+input#getValidateCode {
+    display: contents;
+    width: 190px;
+    margin-right: -200px;
+    color: black;
+}
+
+input#ValidateCode {
+    display: contents;
+    align-self: self-start;
+    width: 100px;
+    margin-left: -200px;
+}
+
+.error:before {
+    content: "\26A1";
+}
+
+.confirm:before {
+    content: "\263B";
+    color: red;
+    font-size: xx-large;
+}
+
+.hint {
+    display: inline-block;
+    font: normal normal normal 14px/1 FontAwesome;
+    font-size: inherit;
+    text-rendering: auto;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+a.extra {
+    border-radius: 7px;
+    padding-left: 12px;
+    padding-right: 12px;
+    font-size: 18px;
+    text-decoration: none;
+    color: #000;
+    background: #f6d85f;
+}
