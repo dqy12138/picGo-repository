@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="DAO.FrontMapper">
+    <resultMap id="BaseResultMap" type="POJO.News">
+        <!--@mbg.generated-->
+        <!--@Table news-->
+        <id column="news_id" jdbcType="BIGINT" property="newsId"/>
+        <result column="category_id" jdbcType="BIGINT" property="categoryId"/>
+        <result column="user_id" jdbcType="BIGINT" property="userId"/>
+        <result column="title" jdbcType="VARCHAR" property="title"/>
+        <result column="content" jdbcType="LONGVARCHAR" property="content"/>
+        <result column="state" jdbcType="INTEGER" property="state"/>
+        <result column="createTime" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="isShown" jdbcType="INTEGER" property="isshown"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        <!--@mbg.generated-->
+        news_id, category_id, user_id, title, content, `state`, createTime, isShown
+    </sql>
+
+    <select id="QueryNewsTitleById" resultType="java.lang.String">
+    select title from news where news_id=#{id} and state=1
+  </select>
+
+    <!--  <select id="QueryNewsById" resultMap="BaseResultMap">-->
+    <!--    select * from news where news_id=#{id}-->
+    <!--  </select>-->
+
+    <select id="QueryNewsByKey" resultMap="BaseResultMap">
+    select * from news where title like CONCAT('%',#{key},'%') and state=1 order by news_id desc limit ${cPage},10
+  </select>
+
+    <!--  <select id="QueryNewsByCId" resultMap="BaseResultMap">-->
+    <!--    select * from news where category_id=#{cid}-->
+    <!--  </select>-->
+
+    <!--  <select id="QueryNewsByCIds" resultMap="BaseResultMap">-->
+    <!--    select news_id,title from news where category_id=#{cid} group by news_id desc limit #{num}-->
+    <!--  </select>-->
+
+    <select id="QueryNewsByUId" resultMap="BaseResultMap">
+    select * from news where user_id=#{uid} order by news_id desc
+  </select>
+
+    <select id="QueryAllCategorys" resultType="POJO.Category">
+    select * from categorys
+  </select>
+
+    <insert id="AddNews" useGeneratedKeys="true" keyProperty="newsId">
+    insert into news(category_id,user_id,title,content,state,createTime) values('${categoryId}','${userId}','${title}','${content}','${state}',NOW())
+  </insert>
+
+    <update id="UpdateNews">
+    update news set category_id=#{categoryId},title=#{title},content=#{content},state=#{state},createTime=NOW() where news_id=#{newsId}
+  </update>
+
+    <delete id="DeleteNews">
+    delete from news where news_id=#{nid}
+  </delete>
+
+    <delete id="DeleteCommentN">
+    delete from comments where news_id=#{nid}
+  </delete>
+
+    <delete id="DeletePic">
+    delete from pics where news_id=#{nid}
+  </delete>
+
+    <!--  <select id="LastId">-->
+    <!--    select last_insert_id()-->
+    <!--  </select>--><!--todo-->
+
+    <insert id="AddPic">
+    insert into pics(news_id,pic_url) values('${newsId}','${picUrl}')
+  </insert>
+
+    <select id="SelectPic" resultType="POJO.Pics">
+    select * from pics group by news_id desc limit 5
+  </select>
+
+    <insert id="AddComment" useGeneratedKeys="true" keyProperty="comment_id">
+    insert into comments(user_id,news_id,content,createTime) values ('${user_id}','${news_id}','${content}',NOW())
+  </insert>
+
+    <select id="QueryCommentsByNewsId" resultType="POJO.Comment">
+    select comments.comment_id,comments.user_id,comments.content,comments.createTime,users.user_name,users.user_icon  from comments,users where users.user_id=comments.user_id and comments.news_id=#{nid} order by comments.comment_id desc limit ${cPage},3
+</select>
+
+    <select id="QueryCommentsByUserId" resultType="POJO.Comment">
+    select comments.comment_id,comments.news_id,comments.content,comments.createTime,comments.user_id,news.title  from comments,news where news.news_id=comments.news_id and comments.user_id=#{uid}
+  </select>
+
+    <update id="updateUserByUId">
+    update users set user_name=#{userName},user_phone=#{userPhone},user_address=#{userAddress},user_detail=#{userDetail},user_icon=#{userIcon} where user_id=#{userId}
+  </update>
+
+    <update id="updatePwdByUId">
+    update users set user_password=#{newPwd} where user_id=#{uid}
+  </update>
+
+    <delete id="DeleteComment">
+    delete from comments where comment_id=#{cid}
+  </delete>
+
+<!--    <select id="QueryUserById" resultType="">-->
+<!--    select * from users where user_id=#{uid}-->
+<!--  </select>-->
+
+    <insert id="AddFeedback">
+    insert into feedbacks(user_id,content,type,createTime) values('${user_id}','${content}','${type}',NOW())
+  </insert>
+</mapper>
